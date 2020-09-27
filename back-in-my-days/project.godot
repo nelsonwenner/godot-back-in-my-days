@@ -26,7 +26,8 @@ config/icon="res://icon.png"
 
 [autoload]
 
-Server="*res://src/singletons/Server.gd"
+Client="*res://src/singletons/Client.gd"
+Global="*res://src/singletons/Global.gd"
 
 [display]
 

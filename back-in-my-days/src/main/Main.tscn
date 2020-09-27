@@ -1,3 +1,37 @@
-[gd_scene format=2]
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/scenes/levels/World.tscn" type="PackedScene" id=1]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node
+
+var network = NetworkedMultiplayerENet.new()
+var ip = \"127.0.0.1\"
+var port = 1909
+
+
+func _ready():
+	_connectToServer()
+
+
+func _connectToServer():
+	network.create_client(ip, port)
+	get_tree().set_network_peer(network)
+	
+	network.connect(\"connection_succeeded\", self, \"_onConnectionSucceded\")
+	network.connect(\"connection_failed\", self, \"_onConnectionFailed\")
+
+	
+func _onConnectionSucceded():
+	Global.runGame(multiplayer.get_network_unique_id())
+	print(\"Successfully connected!\")
+
+
+func _onConnectionFailed():
+	print(\"Failed to connection!\")
+"
 
 [node name="Main" type="Node"]
+script = SubResource( 1 )
+
+[node name="World" parent="." instance=ExtResource( 1 )]

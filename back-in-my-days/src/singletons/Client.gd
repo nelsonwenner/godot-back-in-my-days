@@ -17,9 +17,10 @@ func _connectToServer():
 	network.connect("connection_succeeded", self, "_onConnectionSucceded")
 	
 	
+func _onConnectionSucceded():
+	Global.runGame(multiplayer.get_network_unique_id())
+	print("Successfully connected!")
+
+
 func _onConnectionFailed():
 	print("Failed to connection!")
-	
-	
-func _onConnectionSucceded():
-	print("Successfully connected!")

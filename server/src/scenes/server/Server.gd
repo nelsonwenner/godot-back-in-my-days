@@ -20,8 +20,8 @@ func _startServer():
 	
 	
 func _peerConnected(player_id):
-	print("User " + str(player_id) + "Connected")
+	print("User " + str(player_id) + " Connected")
 	
 	
 func _peerDisconnected(player_id):
-	print("User " + str(player_id) + "Disconnected")
+	print("User " + str(player_id) + " Disconnected")
