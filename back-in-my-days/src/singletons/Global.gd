@@ -1,5 +1,8 @@
 extends Node
 
+onready var player = preload("res://src/scenes/player/Player.tscn")
+onready var world = get_tree().current_scene.get_node("World")
+
 
 func _ready():
 	randomize()
@@ -8,10 +11,10 @@ func _ready():
 
 
 func runGame(id):
-	var player = preload("res://src/scenes/player/Player.tscn").instance()
-	player.name = str(id)
-	player.set_network_master(id)
-	get_tree().current_scene.get_node("World").add_child(player)
+	var player_instance = player.instance()
+	player_instance .name = str(id)
+	player_instance .set_network_master(id)
+	world.add_child(player_instance)
 
 
 func _player_connected(id):
@@ -20,12 +23,12 @@ func _player_connected(id):
 	
 func _player_disconnected(id):
 	if id > 1 and id != multiplayer.get_network_unique_id():
-		get_tree().current_scene.get_node("World").get_node_or_null(str(id)).queue_free()
+		world.get_node_or_null(str(id)).queue_free()
 	
 
 remote func register_player():
 	var id = get_tree().get_rpc_sender_id()
-	var new_player = preload("res://src/scenes/player/Player.tscn").instance()
+	var new_player = player.instance()
 	new_player.set_name(str(id))
 	new_player.set_network_master(id)
-	get_tree().current_scene.get_node("World").add_child(new_player)
+	world.add_child(new_player)
