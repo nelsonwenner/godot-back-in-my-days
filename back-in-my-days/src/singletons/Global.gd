@@ -1,5 +1,5 @@
 extends Node
-
+"""
 onready var player = preload("res://src/scenes/player/Player.tscn")
 onready var world = get_tree().current_scene.get_node("World")
 
@@ -12,8 +12,8 @@ func _ready():
 
 func runGame(id):
 	var player_instance = player.instance()
-	player_instance .name = str(id)
-	player_instance .set_network_master(id)
+	player_instance.set_name(str(id))
+	player_instance.set_network_master(id)
 	world.add_child(player_instance)
 
 
@@ -32,3 +32,4 @@ remote func register_player():
 	new_player.set_name(str(id))
 	new_player.set_network_master(id)
 	world.add_child(new_player)
+"""

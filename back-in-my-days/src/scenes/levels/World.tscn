@@ -4,4 +4,39 @@
 
 [node name="Environments" type="Node2D" parent="."]
 
-[node name="Characters" type="Node2D" parent="."]
+[node name="SpawnPoints" type="Node2D" parent="."]
+
+[node name="0" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 123.471, 107.756 )
+
+[node name="1" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 1091.03, 159.39 )
+
+[node name="2" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 1571.45, 278.371 )
+
+[node name="3" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 1634.31, 686.947 )
+
+[node name="4" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 1445.73, 1023.69 )
+
+[node name="5" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 267.146, 1091.03 )
+
+[node name="6" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 267.146, 637.559 )
+
+[node name="7" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 763.274, 392.862 )
+
+[node name="8" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 805.928, 951.849 )
+
+[node name="9" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 1194.3, 606.13 )
+
+[node name="10" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 1104.5, 1201.04 )
+
+[node name="Players" type="Node2D" parent="."]
