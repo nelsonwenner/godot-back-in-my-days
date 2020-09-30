@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://arts/environments/Assets/Hidding Places/Palms/Palm 1.png" type="Texture" id=1]
+
+[node name="Palm" type="Area2D"]
+scale = Vector2( 0.3, 0.27 )
+z_index = 2
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )

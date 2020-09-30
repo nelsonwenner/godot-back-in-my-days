@@ -1,91 +1,89 @@
 extends Control
 
+onready var Connect = get_node("Connect")
+onready var Connect_name = get_node("Connect/Name")
+onready var Connect_error_label = get_node("Connect/ErrorLabel")
+onready var Players = get_node("Players")
+onready var Players_list = get_node("Players/List")
+onready var Players_start = get_node("Players/Start")
+onready var Connect_ip = get_node("Connect/IPAddress")
+onready var Connect_host = get_node("Connect/Host")
+onready var Connect_join = get_node("Connect/Join")
 
+
+var _player_name = ""
+
+func _on_Name_text_changed(new_text):
+	_player_name = new_text
+
+func _on_Host_pressed():
+	if _player_name == "": return
+	Network.create_server(_player_name)
+	_load_game()
+
+func _on_Join_pressed():
+	if _player_name == "": return
+	Network.connect_to_server(_player_name)
+	_load_game()
+
+func _load_game():
+	get_tree().change_scene("res://src/scenes/levels/World.tscn")
+
+"""
 func _ready():
-	# Called every time the node is added to the scene.
-	GameState.connect("connection_failed", self, "_on_connection_failed")
 	GameState.connect("connection_succeeded", self, "_on_connection_success")
 	GameState.connect("player_list_changed", self, "refresh_list_players")
-	GameState.connect("game_ended", self, "_on_game_ended")
-	GameState.connect("game_error", self, "_on_game_error")
-	# Set the player name according to the system username. Fallback to the path.
-	if OS.has_environment("USERNAME"):
-		$Connect/Name.text = OS.get_environment("USERNAME")
-	else:
-		var desktop_path = OS.get_system_dir(0).replace("\\", "/").split("/")
-		$Connect/Name.text = desktop_path[desktop_path.size() - 2]
 
 
 func _on_Host_pressed():
-	if $Connect/Name.text == "":
-		$Connect/ErrorLabel.text = "Invalid name!"
+	if Connect_name.text == "":
+		Connect_error_label.text = "Invalid name!"
 		return
-
-	$Connect.hide()
-	$Players.show()
-	$Connect/ErrorLabel.text = ""
-
-	var player_name = $Connect/Name.text
-	GameState.host_game(player_name)
+	
+	Connect.hide()
+	Players.show()
+	Connect_error_label.text = ""
+	
+	var player_name = Connect_name.text
+	GameState.create_server(player_name)
 	refresh_list_players()
-
-
-func _on_Join_pressed():
-	print("JOIN")
-	if $Connect/Name.text == "":
-		$Connect/ErrorLabel.text = "Invalid name!"
-		return
-
-	var ip = $Connect/IPAddress.text
-	if not ip.is_valid_ip_address():
-		$Connect/ErrorLabel.text = "Invalid IP address!"
-		return
-
-	$Connect/ErrorLabel.text = ""
-	$Connect/Host.disabled = true
-	$Connect/Join.disabled = true
-
-	var player_name = $Connect/Name.text
-	print(player_name)
-	GameState.join_game(ip, player_name)
-
-
-func _on_connection_success():
-	$Connect.hide()
-	$Players.show()
-
-
-func _on_connection_failed():
-	$Connect/Host.disabled = false
-	$Connect/Join.disabled = false
-	$Connect/ErrorLabel.set_text("Connection failed.")
-
-
-func _on_game_ended():
-	show()
-	$Connect.show()
-	$Players.hide()
-	$Connect/Host.disabled = false
-	$Connect/Join.disabled = false
-
-
-func _on_game_error(errtxt):
-	$ErrorDialog.dialog_text = errtxt
-	$ErrorDialog.popup_centered_minsize()
-	$Connect/Host.disabled = false
-	$Connect/Join.disabled = false
-
+	
 
 func refresh_list_players():
 	var players = GameState.get_player_list()
 	players.sort()
-	$Players/List.clear()
-	$Players/List.add_item(GameState.get_player_name() + " (You)")
-	for p in players:
-		$Players/List.add_item(p)
+	Players_list.clear()
+	Players_list.add_item(GameState.get_player_name() + " (You)")
+	for player in players: 
+		if GameState.get_player_name() != player.name:
+			Players_list.add_item(player.name)
+	Players_start.disabled = not get_tree().is_network_server()
 
-	$Players/Start.disabled = not get_tree().is_network_server()
+
+func _on_Join_pressed():
+	if Connect_name.text == "":
+		Connect_error_label.text = "Invalid name!"
+		return
+
+	var ip = Connect_ip.text
+	if not ip.is_valid_ip_address():
+		Connect_error_label.text = "Invalid IP address!"
+		return
+
+	Connect_error_label.text = ""
+	Connect_host.disabled = true
+	Connect_join.disabled = true
+
+	var player_name = Connect_name.text
+	GameState.connect_to_server(ip, player_name)
+
+
+func _on_connection_success():
+	Connect.hide()
+	Players.show()
 
 
 func _on_Start_pressed():
 	GameState.begin_game()
+"""
+

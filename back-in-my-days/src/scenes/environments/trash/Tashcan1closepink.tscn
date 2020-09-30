@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://arts/environments/Assets/Hidding Places/TrashCan/02/Trashcan2Close.png" type="Texture" id=1]
+
+[node name="Tashcan1closepink" type="Area2D"]
+scale = Vector2( 0.2, 0.2 )
+z_index = 1
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )

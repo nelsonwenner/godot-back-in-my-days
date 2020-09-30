@@ -26,14 +26,11 @@ config/icon="res://icon.png"
 
 [autoload]
 
-GameState="*res://src/singletons/GameState.gd"
+Network="*res://src/singletons/Network.gd"
 
 [display]
 
-window/size/width=1920
-window/size/height=1280
-window/size/test_width=700
-window/size/test_height=600
+window/stretch/aspect="expand"
 
 [input]
 
