@@ -7,10 +7,10 @@ enum MoveDirection { UP, DOWN, LEFT, RIGHT, REST }
 var animated_sprite: AnimatedSprite
 puppet var puppet_position = Vector2()
 puppet var puppet_motion = MoveDirection.REST
-puppet var picked = false
 
 var visibility_control_slave = false
 var hunter = false
+var picked = false
 
 func init(nickname, start_position, is_hunter):
 	global_position = start_position
@@ -47,7 +47,7 @@ func _physics_process(_delta):
 		_move(puppet_motion)
 		position = puppet_position
 	
-	if (not is_network_master()) and (not visibility_control_slave) and (not self.hunter):
+	if (not is_network_master()) and (not visibility_control_slave) and (not hunter):
 		"""
 		If it is not a network master, it will leave the 
 		slave invisible for 60 seconds.
@@ -76,12 +76,51 @@ func _move(direction):
 			_anime_right()
 
 
-sync func gotchar():
-	if picked: return
+puppet func puppet_gotchar():
+	"""
+	Usado para atualizar os seus fantachos no jogo,
+	no caso os clientes.
+	"""
 	picked = true
 	get_node("Ballon").visible = true
+
+
+puppet func puppet_desgotchar():
+	picked = false
+	get_node("Ballon").visible = false
 	
 
+master func master_gotchar():
+	"""
+	Usado para poder atualizar seu proprio contexto,
+	e podendo avisar para os escravos, sua atualizações,
+	apenas o mestre da rede, executa essa função.
+	"""
+	if picked: return
+	rpc("puppet_gotchar") # sincroniza com os escravos, para que eles poção ver a msg, gotchar também!
+	puppet_gotchar() # mestre da rede, dando updade na sua propria variavel, e pondo a msg gotchar!.
+	
+
+master func master_desgotchar():
+	rpc("puppet_desgotchar")
+	puppet_desgotchar()
+
+
+remote func restart(pos):
+	rpc("master_desgotchar")
+	
+	global_position = pos
+	
+	if picked == true and hunter ==  false:
+		hunter = true
+		SPEED = 250
+		
+	if picked == false and hunter == true:
+		visibility_control_slave = false
+		hunter = false
+		SPEED = 200
+		
+		
 func _anime_right():
 	animated_sprite.play("move")
 	animated_sprite.flip_h = false
@@ -100,5 +139,20 @@ func is_hunter():
 	return self.hunter
 	
 
-func change_hunter(id, value):
-	self.hunter = value
+func _on_RestartGame_timeout():
+	if get_tree().is_network_server():
+		print("Restart game!!!")
+		var world = get_tree().get_root().get_node("/root/World/")
+		
+		var spawn_points = {}
+		var spawn_point_idx = 0
+		
+		for peer in multiplayer.get_network_connected_peers():
+			if peer > 1:
+				spawn_points[peer] = spawn_point_idx
+				spawn_point_idx += 1
+		
+		for player_id in spawn_points:
+			var spawn_position = world.get_node("SpawnPoints/" + str(spawn_points[player_id])).position
+			rpc_id(player_id, "restart", spawn_position)
+		restart(Vector2(2898.67, 777.252)) # update servidor position

@@ -33,6 +33,7 @@ func _player_connected(id):
 	"""
 	rpc_id(id, "register_player", player_name)
 
+
 remote func register_player(new_player):
 	"""
 	Register a new player, and register your
