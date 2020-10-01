@@ -13,7 +13,6 @@ var visibility_control_slave = false
 var hunter = false
 
 func init(nickname, start_position, is_hunter):
-	get_node("Label").set_text(nickname)
 	global_position = start_position
 	hunter = is_hunter
 	
@@ -21,6 +20,7 @@ func init(nickname, start_position, is_hunter):
 		var animated_male = get_node("AnimatedMale")
 		animated_male.visible = true
 		animated_sprite = animated_male
+		SPEED = 250
 	else:
 		var animated_female = get_node("AnimatedFemale")
 		animated_female.visible = true
@@ -43,18 +43,17 @@ func _physics_process(_delta):
 		rset_unreliable("puppet_position", position)
 		rset("puppet_motion", direction)
 		_move(direction)
-		
-		
 	else:
 		_move(puppet_motion)
 		position = puppet_position
 	
 	if (not is_network_master()) and (not visibility_control_slave) and (not self.hunter):
 		"""
-		Se não form mestre da rede, irá deixar o escravo invisivel por 60 segundos.
+		If it is not a network master, it will leave the 
+		slave invisible for 60 seconds.
 		"""
 		get_node(".").visible = false
-		yield(get_tree().create_timer(30), "timeout")
+		yield(get_tree().create_timer(10), "timeout")
 		get_node(".").visible = true
 		visibility_control_slave = true
 	
@@ -77,6 +76,12 @@ func _move(direction):
 			_anime_right()
 
 
+sync func gotchar():
+	if picked: return
+	picked = true
+	get_node("Ballon").visible = true
+	
+
 func _anime_right():
 	animated_sprite.play("move")
 	animated_sprite.flip_h = false
@@ -97,13 +102,3 @@ func is_hunter():
 
 func change_hunter(id, value):
 	self.hunter = value
-
-
-sync func picke():
-	picked = true
-	get_node("status").text = "Picked"
-	
-
-sync func despicke():
-	picked = false
-	get_node("status").text = ""
