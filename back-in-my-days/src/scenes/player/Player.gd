@@ -1,18 +1,16 @@
 extends KinematicBody2D
 
-onready var animated_female = get_node("AnimatedFemale")
-onready var animated_male = get_node("AnimatedMale")
-
 var SPEED = 200
 
 enum MoveDirection { UP, DOWN, LEFT, RIGHT, REST }
 
-puppet var animated_sprite: AnimatedSprite
+var animated_sprite: AnimatedSprite
 puppet var puppet_position = Vector2()
 puppet var puppet_motion = MoveDirection.REST
 puppet var picked = false
-puppet var hunter = false
 
+var visibility_control_slave = false
+var hunter = false
 
 func init(nickname, start_position, is_hunter):
 	get_node("Label").set_text(nickname)
@@ -20,9 +18,11 @@ func init(nickname, start_position, is_hunter):
 	hunter = is_hunter
 	
 	if is_hunter:
+		var animated_male = get_node("AnimatedMale")
 		animated_male.visible = true
 		animated_sprite = animated_male
 	else:
+		var animated_female = get_node("AnimatedFemale")
 		animated_female.visible = true
 		animated_sprite = animated_female
 
@@ -43,14 +43,22 @@ func _physics_process(_delta):
 		rset_unreliable("puppet_position", position)
 		rset("puppet_motion", direction)
 		_move(direction)
+		
+		
 	else:
 		_move(puppet_motion)
 		position = puppet_position
 	
-	if get_tree().is_network_server():
-		Network.update_position(int(name), position)
-		#print(Network.players)
-		
+	if (not is_network_master()) and (not visibility_control_slave) and (not self.hunter):
+		"""
+		Se não form mestre da rede, irá deixar o escravo invisivel por 60 segundos.
+		"""
+		get_node(".").visible = false
+		yield(get_tree().create_timer(30), "timeout")
+		get_node(".").visible = true
+		visibility_control_slave = true
+	
+	
 func _move(direction):
 	match direction:
 		MoveDirection.REST:
@@ -82,21 +90,20 @@ func _anime_left():
 func _anime_move():
 	animated_sprite.play("move")
 	
-
-func is_hunter(id):
-	return Network.players[id].hunter
+	
+func is_hunter():
+	return self.hunter
 	
 
 func change_hunter(id, value):
-	Network.players[id].hunter = value
+	self.hunter = value
 
 
 sync func picke():
 	picked = true
-	get_node(".").visible = false
+	get_node("status").text = "Picked"
 	
 
 sync func despicke():
 	picked = false
-	get_node(".").visible = true
-
+	get_node("status").text = ""

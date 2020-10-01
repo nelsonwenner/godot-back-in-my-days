@@ -1,6 +1,5 @@
-[gd_scene load_steps=34 format=2]
+[gd_scene load_steps=33 format=2]
 
-[ext_resource path="res://src/scenes/levels/World.gd" type="Script" id=1]
 [ext_resource path="res://arts/background/Background.png" type="Texture" id=2]
 [ext_resource path="res://arts/environments/Assets/floor/floor.png" type="Texture" id=3]
 [ext_resource path="res://src/scenes/environments/bush/bush2.tscn" type="PackedScene" id=4]
@@ -59,7 +58,6 @@ points = PoolVector2Array( 64, 64, 0, 64, 0, 0, 64, 0 )
 0/z_index = 0
 
 [node name="World" type="Node2D"]
-script = ExtResource( 1 )
 
 [node name="Environment" type="Node2D" parent="."]
 
@@ -317,36 +315,35 @@ position = Vector2( 853.125, 152.33 )
 scale = Vector2( 0.5, 0.5 )
 
 [node name="SpawnPoints" type="Node2D" parent="."]
-visible = false
+
+[node name="0" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 1047.81, 472.679 )
 
 [node name="1" type="Position2D" parent="SpawnPoints"]
-position = Vector2( 402.205, 491.557 )
+position = Vector2( 3100.53, -114.281 )
 
 [node name="2" type="Position2D" parent="SpawnPoints"]
-position = Vector2( 1571.45, 278.371 )
+position = Vector2( 1940.13, -139.887 )
 
 [node name="3" type="Position2D" parent="SpawnPoints"]
-position = Vector2( 1634.31, 686.947 )
+position = Vector2( 596.243, -131.612 )
 
 [node name="4" type="Position2D" parent="SpawnPoints"]
-position = Vector2( 1445.73, 1023.69 )
+position = Vector2( 116.126, -132.231 )
 
 [node name="5" type="Position2D" parent="SpawnPoints"]
-position = Vector2( 267.146, 1091.03 )
+position = Vector2( 2898.67, 777.252 )
 
 [node name="6" type="Position2D" parent="SpawnPoints"]
-position = Vector2( 267.146, 637.559 )
+position = Vector2( 1801.54, 1193.27 )
 
 [node name="7" type="Position2D" parent="SpawnPoints"]
-position = Vector2( 763.274, 392.862 )
+position = Vector2( 152.767, 868.788 )
 
 [node name="8" type="Position2D" parent="SpawnPoints"]
-position = Vector2( 805.928, 951.849 )
+position = Vector2( 1964.5, 273.886 )
 
 [node name="9" type="Position2D" parent="SpawnPoints"]
-position = Vector2( 1194.3, 606.13 )
-
-[node name="10" type="Position2D" parent="SpawnPoints"]
-position = Vector2( 1104.5, 1201.04 )
+position = Vector2( 2274.9, 657.368 )
 
 [node name="Players" type="Node2D" parent="."]

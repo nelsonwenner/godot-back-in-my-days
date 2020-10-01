@@ -1,38 +1,22 @@
 extends Control
 
-onready var Connect = get_node("Connect")
-onready var Connect_name = get_node("Connect/Name")
 onready var Connect_error_label = get_node("Connect/ErrorLabel")
-onready var Players = get_node("Players")
-onready var Players_list = get_node("Players/List")
-onready var Players_start = get_node("Players/Start")
 onready var Connect_ip = get_node("Connect/IPAddress")
+onready var Players_start = get_node("Players/Start")
+onready var Connect_name = get_node("Connect/Name")
+onready var Players_list = get_node("Players/List")
 onready var Connect_host = get_node("Connect/Host")
 onready var Connect_join = get_node("Connect/Join")
+onready var Error_dialog = get_node("ErrorDialog")
+onready var Players = get_node("Players")
+onready var Connect = get_node("Connect")
 
 
-var _player_name = ""
-
-func _on_Name_text_changed(new_text):
-	_player_name = new_text
-
-func _on_Host_pressed():
-	if _player_name == "": return
-	Network.create_server(_player_name)
-	_load_game()
-
-func _on_Join_pressed():
-	if _player_name == "": return
-	Network.connect_to_server(_player_name)
-	_load_game()
-
-func _load_game():
-	get_tree().change_scene("res://src/scenes/levels/World.tscn")
-
-"""
 func _ready():
-	GameState.connect("connection_succeeded", self, "_on_connection_success")
-	GameState.connect("player_list_changed", self, "refresh_list_players")
+	Server.connect("connection_succeeded", self, "_on_connection_success")
+	Server.connect("player_list_changed", self, "refresh_list_players")
+	Server.connect("game_error", self, "_on_game_error")
+	Server.connect("game_ended", self, "_on_game_ended")
 
 
 func _on_Host_pressed():
@@ -45,18 +29,17 @@ func _on_Host_pressed():
 	Connect_error_label.text = ""
 	
 	var player_name = Connect_name.text
-	GameState.create_server(player_name)
+	Server.create_server(player_name)
 	refresh_list_players()
 	
 
 func refresh_list_players():
-	var players = GameState.get_player_list()
+	var players = Server.get_player_list()
 	players.sort()
 	Players_list.clear()
-	Players_list.add_item(GameState.get_player_name() + " (You)")
-	for player in players: 
-		if GameState.get_player_name() != player.name:
-			Players_list.add_item(player.name)
+	Players_list.add_item(Server.get_player_name() + " (You)")
+	for player in players:
+		Players_list.add_item(player)
 	Players_start.disabled = not get_tree().is_network_server()
 
 
@@ -65,17 +48,27 @@ func _on_Join_pressed():
 		Connect_error_label.text = "Invalid name!"
 		return
 
-	var ip = Connect_ip.text
-	if not ip.is_valid_ip_address():
-		Connect_error_label.text = "Invalid IP address!"
-		return
-
 	Connect_error_label.text = ""
 	Connect_host.disabled = true
 	Connect_join.disabled = true
 
 	var player_name = Connect_name.text
-	GameState.connect_to_server(ip, player_name)
+	Server.connect_to_server(player_name)
+
+
+func _on_game_ended():
+	show()
+	Connect.show()
+	Players.hide()
+	Connect_host.disabled = false
+	Connect_join.disabled = false
+
+
+func _on_game_error(errtxt):
+	Error_dialog.dialog_text = errtxt
+	Error_dialog.popup_centered_minsize()
+	Connect_host.disabled = false
+	Connect_join.disabled = false
 
 
 func _on_connection_success():
@@ -84,6 +77,4 @@ func _on_connection_success():
 
 
 func _on_Start_pressed():
-	GameState.begin_game()
-"""
-
+	Server.begin_game()
