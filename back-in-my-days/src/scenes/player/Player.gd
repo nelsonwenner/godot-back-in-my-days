@@ -2,30 +2,108 @@ extends KinematicBody2D
 
 var SPEED = 200
 
+enum MoveDirection { UP, DOWN, LEFT, RIGHT, REST }
 
-func _ready():
-	pass
+var animated_sprite: AnimatedSprite
+puppet var puppet_position = Vector2()
+puppet var puppet_motion = MoveDirection.REST
+puppet var picked = false
 
+var visibility_control_slave = false
+var hunter = false
 
-func _process(_delta):
-	var move = Vector2(0, 0)
+func init(nickname, start_position, is_hunter):
+	get_node("Label").set_text(nickname)
+	global_position = start_position
+	hunter = is_hunter
 	
-	if is_network_master(): 
+	if is_hunter:
+		var animated_male = get_node("AnimatedMale")
+		animated_male.visible = true
+		animated_sprite = animated_male
+	else:
+		var animated_female = get_node("AnimatedFemale")
+		animated_female.visible = true
+		animated_sprite = animated_female
+
+
+func _physics_process(_delta):
+	var direction = MoveDirection.REST
+	
+	if is_network_master():
 		if Input.is_action_pressed("player_up"):
-			move.y = -1
+			direction = MoveDirection.UP
 		elif Input.is_action_pressed("player_down"):
-			move.y = 1
-		if Input.is_action_pressed("player_right"):
-			move.x = 1
+			direction = MoveDirection.DOWN
+		elif Input.is_action_pressed("player_right"):
+			direction = MoveDirection.RIGHT
 		elif Input.is_action_pressed("player_left"):
-			move.x = -1
-		
-		for peer in multiplayer.get_network_connected_peers():
-			if peer > 1:
-				rpc_unreliable_id(peer, "setPosition", global_position)
+			direction = MoveDirection.LEFT
 
-	translate(move * SPEED * _delta)
+		rset_unreliable("puppet_position", position)
+		rset("puppet_motion", direction)
+		_move(direction)
+		
+		
+	else:
+		_move(puppet_motion)
+		position = puppet_position
+	
+	if (not is_network_master()) and (not visibility_control_slave) and (not self.hunter):
+		"""
+		Se não form mestre da rede, irá deixar o escravo invisivel por 60 segundos.
+		"""
+		get_node(".").visible = false
+		yield(get_tree().create_timer(30), "timeout")
+		get_node(".").visible = true
+		visibility_control_slave = true
 	
 	
-puppet func setPosition(pos):
-	global_position = pos
+func _move(direction):
+	match direction:
+		MoveDirection.REST:
+			animated_sprite.play("rest")
+		MoveDirection.UP:
+			move_and_slide(Vector2(0, -SPEED))
+			_anime_move()
+		MoveDirection.DOWN:
+			move_and_slide(Vector2(0, SPEED))
+			_anime_move()
+		MoveDirection.LEFT:
+			move_and_slide(Vector2(-SPEED, 0))
+			_anime_left()
+		MoveDirection.RIGHT:
+			move_and_slide(Vector2(SPEED, 0))
+			_anime_right()
+
+
+func _anime_right():
+	animated_sprite.play("move")
+	animated_sprite.flip_h = false
+
+	
+func _anime_left():
+	animated_sprite.play("move")
+	animated_sprite.flip_h = true
+
+
+func _anime_move():
+	animated_sprite.play("move")
+	
+	
+func is_hunter():
+	return self.hunter
+	
+
+func change_hunter(id, value):
+	self.hunter = value
+
+
+sync func picke():
+	picked = true
+	get_node("status").text = "Picked"
+	
+
+sync func despicke():
+	picked = false
+	get_node("status").text = ""

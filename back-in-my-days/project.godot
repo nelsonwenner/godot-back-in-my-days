@@ -8,14 +8,9 @@
 
 config_version=4
 
-_global_script_classes=[ {
-"base": "KinematicBody2D",
-"class": "Actor",
-"language": "GDScript",
-"path": "res://src/scripts/Actor.gd"
-} ]
+_global_script_classes=[  ]
 _global_script_class_icons={
-"Actor": ""
+
 }
 
 [application]
@@ -26,15 +21,11 @@ config/icon="res://icon.png"
 
 [autoload]
 
-Client="*res://src/singletons/Client.gd"
-Global="*res://src/singletons/Global.gd"
+Server="*res://src/singletons/Server.gd"
 
 [display]
 
-window/size/width=1920
-window/size/height=1280
-window/size/test_width=1280
-window/size/test_height=720
+window/stretch/aspect="expand"
 
 [input]
 
