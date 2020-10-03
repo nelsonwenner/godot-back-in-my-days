@@ -115,9 +115,10 @@ master func master_gotchar():
 	apenas o mestre da rede, executa essa função.
 	"""
 	if picked: return
-	rpc("puppet_gotchar") # sincroniza com os escravos, para que eles poção ver a msg, gotchar também!
-	puppet_gotchar() # mestre da rede, dando updade na sua propria variavel, e pondo a msg gotchar!.
-
+	rpc("puppet_gotchar") # synchronizes with the slaves, so that they can see the msg, gotchar too!
+	puppet_gotchar() # master of the network, giving update on its own variable, and putting the msg gotchar!
+	
+	# update for all clients and servers, this variable.
 	rset("hunter_picked_player", true)
 
 
@@ -136,7 +137,6 @@ remote func restart(pos):
 	if picked == false and hunter == true and hunter_picked_player:
 		hunter = false
 		SPEED = 200
-		print("Current Player DEIXÁ DE SER HUNTER => ", int(name))
 	
 	global_position = pos
 	rpc("master_desgotchar")
