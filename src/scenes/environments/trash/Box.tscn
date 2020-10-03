@@ -3,7 +3,7 @@
 [ext_resource path="res://arts/environments/Assets/Hidding Places/Box/Box.png" type="Texture" id=1]
 
 [node name="Box" type="StaticBody2D"]
-scale = Vector2( 0.2, 0.2 )
+scale = Vector2( 0.3, 0.3 )
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )

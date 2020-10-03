@@ -4,7 +4,7 @@
 
 [node name="Car3" type="StaticBody2D"]
 position = Vector2( 0, 4.76837e-07 )
-scale = Vector2( 0.2, 0.2 )
+scale = Vector2( 0.28, 0.28 )
 
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 0, -120 )
