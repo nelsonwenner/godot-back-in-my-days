@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://arts/environments/Assets/Hidding Places/Bush/Bush 1.png" type="Texture" id=1]
+
+[node name="Bush1" type="Node2D"]
+scale = Vector2( 0.4, 0.4 )
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 0, -160 )
+texture = ExtResource( 1 )

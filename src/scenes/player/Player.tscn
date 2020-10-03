@@ -1,0 +1,123 @@
+[gd_scene load_steps=30 format=2]
+
+[ext_resource path="res://arts/players/Character 1/Rest/ide.png" type="Texture" id=1]
+[ext_resource path="res://src/scenes/player/Player.gd" type="Script" id=2]
+[ext_resource path="res://src/scenes/player/Detection.gd" type="Script" id=3]
+[ext_resource path="res://arts/players/Character 1/Run/4.png" type="Texture" id=4]
+[ext_resource path="res://arts/players/Character 1/Run/5.png" type="Texture" id=5]
+[ext_resource path="res://arts/players/Character 1/Run/3.png" type="Texture" id=6]
+[ext_resource path="res://arts/players/Character 1/Run/1.png" type="Texture" id=7]
+[ext_resource path="res://arts/players/Character 1/Run/2.png" type="Texture" id=8]
+[ext_resource path="res://arts/players/Character 1/Run/0.png" type="Texture" id=9]
+[ext_resource path="res://arts/players/ballon/Ballons/Gotcha6.png" type="Texture" id=10]
+[ext_resource path="res://arts/players/Character 2/Run/0.png" type="Texture" id=11]
+[ext_resource path="res://arts/players/Character 2/Run/2.png" type="Texture" id=12]
+[ext_resource path="res://arts/players/Character 2/Run/3.png" type="Texture" id=13]
+[ext_resource path="res://arts/players/Character 2/Rest/IDE.png" type="Texture" id=14]
+[ext_resource path="res://arts/players/Character 2/Run/4.png" type="Texture" id=15]
+[ext_resource path="res://arts/players/Character 2/Run/5.png" type="Texture" id=16]
+[ext_resource path="res://arts/players/Character 2/Run/1.png" type="Texture" id=17]
+[ext_resource path="res://arts/players/ballon/Ballons/Gotcha5.png" type="Texture" id=18]
+[ext_resource path="res://arts/players/ballon/Ballons/Gotcha2B.png" type="Texture" id=19]
+[ext_resource path="res://arts/players/ballon/Ballons/Gotcha2BRs.png" type="Texture" id=20]
+[ext_resource path="res://arts/players/ballon/Ballons/Gotcha7.png" type="Texture" id=21]
+[ext_resource path="res://arts/players/ballon/Ballons/Gotcha0.png" type="Texture" id=22]
+[ext_resource path="res://arts/players/ballon/Ballons/Gotcha4.png" type="Texture" id=23]
+[ext_resource path="res://arts/players/ballon/Ballons/Gotcha3.png" type="Texture" id=24]
+[ext_resource path="res://arts/players/ballon/Ballons/Gotcha1.png" type="Texture" id=25]
+[ext_resource path="res://arts/players/ballon/Ballons/Gotcha2.png" type="Texture" id=26]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 1 ) ],
+"loop": false,
+"name": "rest",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 9 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 6 ), ExtResource( 4 ), ExtResource( 5 ) ],
+"loop": true,
+"name": "move",
+"speed": 10.0
+} ]
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 14 ) ],
+"loop": false,
+"name": "rest",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 11 ), ExtResource( 17 ), ExtResource( 12 ), ExtResource( 13 ), ExtResource( 15 ), ExtResource( 16 ) ],
+"loop": true,
+"name": "move",
+"speed": 10.0
+} ]
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ ExtResource( 22 ), ExtResource( 25 ), ExtResource( 26 ), ExtResource( 19 ), ExtResource( 20 ), ExtResource( 24 ), ExtResource( 23 ), ExtResource( 18 ), ExtResource( 10 ), ExtResource( 21 ) ],
+"loop": true,
+"name": "gotcha",
+"speed": 6.0
+} ]
+
+[node name="Player" type="KinematicBody2D" groups=[
+"players",
+]]
+scale = Vector2( 0.3, 0.3 )
+script = ExtResource( 2 )
+
+[node name="AnimatedMale" type="AnimatedSprite" parent="."]
+visible = false
+position = Vector2( 0, -160 )
+frames = SubResource( 1 )
+animation = "rest"
+playing = true
+
+[node name="AnimatedFemale" type="AnimatedSprite" parent="."]
+visible = false
+position = Vector2( 0, -160 )
+frames = SubResource( 2 )
+animation = "rest"
+
+[node name="AnimatedGotcha" type="AnimatedSprite" parent="."]
+visible = false
+position = Vector2( 90.3202, -584.57 )
+scale = Vector2( 0.45606, 0.454191 )
+z_index = 3
+frames = SubResource( 3 )
+animation = "gotcha"
+frame = 1
+
+[node name="Detection" type="Area2D" parent="."]
+position = Vector2( 0, -160 )
+collision_mask = 2147483649
+script = ExtResource( 3 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Detection"]
+position = Vector2( -4.99435, 153.757 )
+polygon = PoolVector2Array( -133.077, 50.0261, -129.514, 96.4635, -112.034, 138.916, -78.3221, 170.13, -33.3729, 193.853, 16.5707, 200.096, 75.2544, 183.865, 113.961, 145.158, 137.684, 92.7177, 141.43, 36.5312, 140.181, -37.1356, 132.69, -113.3, 101.475, -157, 62.7685, -183.221, 25.6532, -191.283, -19.3232, -189.96, -59.6697, -177.394, -94.0634, -154.244, -116.552, -119.189, -128.266, -88.3277, -132.426, -46.4329, -133.26, 24.0453, -151.607, 23.6773, -152.268, -51.0629, -146.315, -96.0392, -129.118, -135.724, -104.646, -172.102, -68.2681, -192.606, -22.6303, -206.496, 30.9445, -207.157, 71.9524, -197.897, 122.22, -166.811, 150.661, -121.173, 159.259, -38.4959, 159.259, 36.9056, 155.723, 93.8286, 128.253, 150.252, 85.9357, 193.312, 21.3456, 211.873, -38.7901, 206.676, -84.0774, 184.403, -126.395, 150.995, -150.152, 97.5407, -150.895, 49.2837 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
+position = Vector2( 0, 6.4373e-06 )
+rotation = 1.5708
+polygon = PoolVector2Array( 0.000379695, 106.667, -19.9997, 80.0001, -20.0003, -79.9999, -0.000389099, -106.667, 19.9997, -80.0001, 20.0003, 79.9999, 0.000379695, 106.667 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 0, -160 )
+current = true
+zoom = Vector2( 1.76, 1.8 )
+limit_left = 0
+limit_top = -550
+limit_right = 3380
+limit_bottom = 408
+editor_draw_drag_margin = true
+
+[node name="RestartGame" type="Timer" parent="."]
+wait_time = 60.0
+autostart = true
+[connection signal="body_entered" from="Detection" to="Detection" method="_on_Detection_body_entered"]
+[connection signal="timeout" from="RestartGame" to="." method="_on_RestartGame_timeout"]
