@@ -9,6 +9,11 @@ puppet var puppet_position = Vector2()
 puppet var puppet_motion = MoveDirection.REST
 
 var visibility_control_slave = false
+
+# synchronize this variable if it is updated
+# for all connected clients and servers.
+sync var hunter_picked_player = false
+
 var hunter = false
 var picked = false
 
@@ -101,7 +106,7 @@ puppet func puppet_desgotchar():
 	var animated_gotcha = get_node("AnimatedGotcha")
 	animated_gotcha.visible = false
 	animated_gotcha.stop()
-	
+
 
 master func master_gotchar():
 	"""
@@ -112,7 +117,9 @@ master func master_gotchar():
 	if picked: return
 	rpc("puppet_gotchar") # sincroniza com os escravos, para que eles poção ver a msg, gotchar também!
 	puppet_gotchar() # mestre da rede, dando updade na sua propria variavel, e pondo a msg gotchar!.
-	
+
+	rset("hunter_picked_player", true)
+
 
 master func master_desgotchar():
 	rpc("puppet_desgotchar")
@@ -121,19 +128,21 @@ master func master_desgotchar():
 
 remote func restart(pos):
 	visibility_control_slave = false
-			
-	if picked == true and hunter ==  false:
+	
+	if picked == true and hunter == false:
 		hunter = true
 		SPEED = 250
-		
-	if picked == false and hunter == true:
+	
+	if picked == false and hunter == true and hunter_picked_player:
 		hunter = false
 		SPEED = 200
-		
-	rpc("master_desgotchar")
+		print("Current Player DEIXÁ DE SER HUNTER => ", int(name))
 	
 	global_position = pos
-		
+	rpc("master_desgotchar")
+	
+	#update for all clients and servers, this variable.
+	rset("hunter_picked_player", false) 
 		
 func _anime_right():
 	animated_sprite.play("move")
@@ -147,10 +156,6 @@ func _anime_left():
 
 func _anime_move():
 	animated_sprite.play("move")
-	
-	
-func is_hunter():
-	return self.hunter
 	
 
 func _on_RestartGame_timeout():

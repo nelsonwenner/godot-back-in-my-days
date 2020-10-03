@@ -65,14 +65,14 @@ points = PoolVector2Array( 64, 64, 0, 64, 0, 0, 64, 0 )
 
 [sub_resource type="SpriteFrames" id=3]
 animations = [ {
-"frames": [ ExtResource( 33 ) ],
-"loop": true,
-"name": "male",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 32 ) ],
 "loop": true,
 "name": "female",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 33 ) ],
+"loop": true,
+"name": "male",
 "speed": 5.0
 } ]
 
