@@ -12,6 +12,13 @@ var visibility_control_slave = false
 var hunter = false
 var picked = false
 
+var rng
+
+func _ready():
+	rng = RandomNumberGenerator.new()
+	rng.randomize()
+	
+
 func init(nickname, start_position, is_hunter):
 	global_position = start_position
 	hunter = is_hunter
@@ -62,6 +69,7 @@ func _move(direction):
 	match direction:
 		MoveDirection.REST:
 			animated_sprite.play("rest")
+			return
 		MoveDirection.UP:
 			move_and_slide(Vector2(0, -SPEED))
 			_anime_move()
@@ -81,13 +89,18 @@ puppet func puppet_gotchar():
 	Usado para atualizar os seus fantachos no jogo,
 	no caso os clientes.
 	"""
+	if hunter or picked: return
 	picked = true
-	get_node("Ballon").visible = true
+	var animated_gotcha = get_node("AnimatedGotcha")
+	animated_gotcha.visible = true
+	animated_gotcha.play("gotcha")
 
 
 puppet func puppet_desgotchar():
 	picked = false
-	get_node("Ballon").visible = false
+	var animated_gotcha = get_node("AnimatedGotcha")
+	animated_gotcha.visible = false
+	animated_gotcha.stop()
 	
 
 master func master_gotchar():
@@ -107,18 +120,19 @@ master func master_desgotchar():
 
 
 remote func restart(pos):
-	rpc("master_desgotchar")
-	
-	global_position = pos
-	
+	visibility_control_slave = false
+			
 	if picked == true and hunter ==  false:
 		hunter = true
 		SPEED = 250
 		
 	if picked == false and hunter == true:
-		visibility_control_slave = false
 		hunter = false
 		SPEED = 200
+		
+	rpc("master_desgotchar")
+	
+	global_position = pos
 		
 		
 func _anime_right():
@@ -141,18 +155,13 @@ func is_hunter():
 
 func _on_RestartGame_timeout():
 	if get_tree().is_network_server():
-		print("Restart game!!!")
 		var world = get_tree().get_root().get_node("/root/World/")
 		
-		var spawn_points = {}
-		var spawn_point_idx = 0
-		
-		for peer in multiplayer.get_network_connected_peers():
-			if peer > 1:
-				spawn_points[peer] = spawn_point_idx
-				spawn_point_idx += 1
-		
-		for player_id in spawn_points:
-			var spawn_position = world.get_node("SpawnPoints/" + str(spawn_points[player_id])).position
-			rpc_id(player_id, "restart", spawn_position)
-		restart(Vector2(2898.67, 777.252)) # update servidor position
+		for player_id in multiplayer.get_network_connected_peers():
+			if player_id > 1:
+				var random_spawn_point = rng.randi_range(0, 4) # position de Spawnpoints.
+				var spawn_position = world.get_node("SpawnPoints/" + str(random_spawn_point)).position
+				rpc_id(player_id, "restart", spawn_position)
+		var random_spawn_point = rng.randi_range(5, 9)
+		var spawn_position = world.get_node("SpawnPoints/" + str(random_spawn_point)).position
+		restart(spawn_position) # update servidor position

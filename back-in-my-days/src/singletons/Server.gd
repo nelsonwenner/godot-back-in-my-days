@@ -165,6 +165,10 @@ remote func pre_start_game(spawn_points):
 		)
 
 		world.get_node("Players").add_child(player)
+	
+	world.get_node("InfoPlayers").add_player(get_tree().get_network_unique_id(), player_name)
+	for p in players:
+		world.get_node("InfoPlayers").add_player(p, players[p])
 		
 	if not get_tree().is_network_server():
 		"""

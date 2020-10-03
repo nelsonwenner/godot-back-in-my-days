@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Gotcha2.png-3a8cfcbdbb47ea7f39d694fb8cb7d0e0.stex"
+path="res://.import/RunnerIcon.png-edbd40f8e215120dc3c5b41c4753346f.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://arts/players/ballon/Gotcha2.png"
-dest_files=[ "res://.import/Gotcha2.png-3a8cfcbdbb47ea7f39d694fb8cb7d0e0.stex" ]
+source_file="res://arts/players/Icons/RunnerIcon.png"
+dest_files=[ "res://.import/RunnerIcon.png-edbd40f8e215120dc3c5b41c4753346f.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
