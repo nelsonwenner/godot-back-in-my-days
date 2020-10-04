@@ -65,14 +65,14 @@ points = PoolVector2Array( 64, 64, 0, 64, 0, 0, 64, 0 )
 
 [sub_resource type="SpriteFrames" id=3]
 animations = [ {
-"frames": [ ExtResource( 32 ) ],
-"loop": true,
-"name": "female",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 33 ) ],
 "loop": true,
 "name": "male",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 32 ) ],
+"loop": true,
+"name": "female",
 "speed": 5.0
 } ]
 
@@ -211,57 +211,44 @@ scale = Vector2( 0.25, 0.28 )
 
 [node name="Longcar3" parent="Environment/Items/Cars" instance=ExtResource( 11 )]
 position = Vector2( 627.292, 731.441 )
-scale = Vector2( 0.25, 0.23 )
 
 [node name="Longcar4" parent="Environment/Items/Cars" instance=ExtResource( 11 )]
 position = Vector2( 2482.44, 194.485 )
-scale = Vector2( 0.25, 0.23 )
 
 [node name="Cars1" parent="Environment/Items/Cars" instance=ExtResource( 12 )]
 position = Vector2( 1388.44, 738.17 )
-scale = Vector2( 0.25, 0.23 )
 
 [node name="Longcar1" parent="Environment/Items/Cars" instance=ExtResource( 13 )]
 position = Vector2( 2785.07, 194.727 )
-scale = Vector2( 0.25, 0.23 )
 
 [node name="Car4" parent="Environment/Items/Cars" instance=ExtResource( 14 )]
 position = Vector2( 1160.95, 200.339 )
-scale = Vector2( 0.25, 0.23 )
 
 [node name="Car3" parent="Environment/Items/Cars" instance=ExtResource( 15 )]
 position = Vector2( 2419.02, 737.946 )
-scale = Vector2( 0.25, 0.23 )
 
 [node name="Paulcar" parent="Environment/Items/Cars" instance=ExtResource( 16 )]
 position = Vector2( 2752.89, 737.46 )
-scale = Vector2( 0.25, 0.23 )
 
 [node name="Longcar2" parent="Environment/Items/Cars" instance=ExtResource( 17 )]
 position = Vector2( 1708.07, 737.874 )
-scale = Vector2( 0.25, 0.23 )
 
 [node name="Car2" parent="Environment/Items/Cars" instance=ExtResource( 18 )]
 position = Vector2( 2055.65, 738.47 )
-scale = Vector2( 0.25, 0.23 )
 
 [node name="Machines" type="YSort" parent="Environment/Items"]
 
 [node name="Machine1" parent="Environment/Items/Machines" instance=ExtResource( 19 )]
 position = Vector2( 2142.55, -144.095 )
-scale = Vector2( 0.22, 0.22 )
 
 [node name="Machine4" parent="Environment/Items/Machines" instance=ExtResource( 19 )]
 position = Vector2( 1449.26, -147.57 )
-scale = Vector2( 0.22, 0.22 )
 
 [node name="Machine2" parent="Environment/Items/Machines" instance=ExtResource( 20 )]
-position = Vector2( 2074.57, -145.354 )
-scale = Vector2( 0.22, 0.22 )
+position = Vector2( 2078.57, -145.354 )
 
 [node name="Machine3" parent="Environment/Items/Machines" instance=ExtResource( 20 )]
-position = Vector2( 1381.79, -148.023 )
-scale = Vector2( 0.22, 0.22 )
+position = Vector2( 1384, -147.57 )
 
 [node name="Columns" type="YSort" parent="Environment/Items"]
 position = Vector2( 0, 12 )
@@ -292,11 +279,10 @@ scale = Vector2( 0.25, 0.3 )
 
 [node name="Trashcan1close" parent="Environment/Items/Trash" instance=ExtResource( 26 )]
 position = Vector2( 1574.3, 603.958 )
-scale = Vector2( 0.25, 0.25 )
+scale = Vector2( 0.22, 0.22 )
 
 [node name="Trashcan1close2" parent="Environment/Items/Trash" instance=ExtResource( 26 )]
 position = Vector2( 1194.3, 351.958 )
-scale = Vector2( 0.28, 0.28 )
 
 [node name="Trashcan1close3" parent="Environment/Items/Trash" instance=ExtResource( 26 )]
 position = Vector2( 2293.09, -118.955 )
@@ -304,31 +290,24 @@ scale = Vector2( 0.22, 0.22 )
 
 [node name="Tashcan1closepink" parent="Environment/Items/Trash" instance=ExtResource( 27 )]
 position = Vector2( 1212.35, 611.199 )
-scale = Vector2( 0.25, 0.25 )
 
 [node name="Tashcan1closepink2" parent="Environment/Items/Trash" instance=ExtResource( 27 )]
-position = Vector2( 1609.47, -118.316 )
-scale = Vector2( 0.22, 0.22 )
+position = Vector2( 327.505, -113.559 )
 
 [node name="Trashcan1closegreen" parent="Environment/Items/Trash" instance=ExtResource( 28 )]
 position = Vector2( 2337.41, 327.424 )
-scale = Vector2( 0.28, 0.28 )
 
 [node name="Trashcan4close" parent="Environment/Items/Trash" instance=ExtResource( 29 )]
 position = Vector2( 2194.46, 605.161 )
-scale = Vector2( 0.25, 0.25 )
 
 [node name="Trashcan4close2" parent="Environment/Items/Trash" instance=ExtResource( 29 )]
 position = Vector2( 699.533, 334.764 )
-scale = Vector2( 0.28, 0.28 )
 
 [node name="Trashcan4close3" parent="Environment/Items/Trash" instance=ExtResource( 29 )]
 position = Vector2( 2957.07, 382.872 )
-scale = Vector2( 0.28, 0.28 )
 
 [node name="Box" parent="Environment/Items/Trash" instance=ExtResource( 30 )]
 position = Vector2( 1886.98, 358.585 )
-scale = Vector2( 0.28, 0.28 )
 
 [node name="Manholes" type="YSort" parent="Environment/Items"]
 
