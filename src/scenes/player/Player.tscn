@@ -117,7 +117,7 @@ limit_bottom = 408
 editor_draw_drag_margin = true
 
 [node name="RestartGame" type="Timer" parent="."]
-wait_time = 60.0
+wait_time = 160.0
 autostart = true
 [connection signal="body_entered" from="Detection" to="Detection" method="_on_Detection_body_entered"]
 [connection signal="timeout" from="RestartGame" to="." method="_on_RestartGame_timeout"]

@@ -65,7 +65,7 @@ func _physics_process(_delta):
 		slave invisible for 60 seconds.
 		"""
 		get_node(".").visible = false
-		yield(get_tree().create_timer(10), "timeout")
+		yield(get_tree().create_timer(30), "timeout")
 		get_node(".").visible = true
 		visibility_control_slave = true
 	

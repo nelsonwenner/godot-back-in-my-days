@@ -49,6 +49,11 @@ points = PoolVector2Array( 64, 64, 0, 64, 0, 0, 64, 0 )
 0/tile_mode = 0
 0/occluder_offset = Vector2( 0, 0 )
 0/navigation_offset = Vector2( 0, 0 )
+0/shape_offset = Vector2( 0, 0 )
+0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+0/shape = SubResource( 1 )
+0/shape_one_way = false
+0/shape_one_way_margin = 1.0
 0/shapes = [ {
 "autotile_coord": Vector2( 0, 0 ),
 "one_way": false,
@@ -73,14 +78,14 @@ animations = [ {
 
 [sub_resource type="SpriteFrames" id=4]
 animations = [ {
-"frames": [ ExtResource( 35 ) ],
-"loop": true,
-"name": "runner",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 34 ) ],
 "loop": true,
 "name": "hunter",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 35 ) ],
+"loop": true,
+"name": "runner",
 "speed": 5.0
 } ]
 
@@ -287,7 +292,7 @@ scale = Vector2( 0.22, 0.22 )
 position = Vector2( 1212.35, 611.199 )
 
 [node name="Tashcan1closepink2" parent="Environment/Items/Trash" instance=ExtResource( 27 )]
-position = Vector2( 1609.47, -118.316 )
+position = Vector2( 327.505, -113.559 )
 
 [node name="Trashcan1closegreen" parent="Environment/Items/Trash" instance=ExtResource( 28 )]
 position = Vector2( 2337.41, 327.424 )
