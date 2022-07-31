@@ -1,9 +1,10 @@
 extends Node
 
-const DEFAULT_IP = '127.0.0.1'
-const DEFAULT_PORT = 31400
-const MAX_PLAYERS = 10
+var DEFAULT_IP = IP.get_local_addresses()[0]
+const DEFAULT_PORT = 6969
+const MAX_PLAYERS = 20
 
+var server_code = null
 var player_name = null
 
 var players_ready = []
@@ -17,13 +18,16 @@ signal connection_succeeded()
 signal game_ended()
 signal game_error(what)
 
+var rng = RandomNumberGenerator.new()
+
 func _ready():
+	rng.randomize()
+
 	get_tree().connect('network_peer_disconnected', self, '_on_player_disconnected')
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 	get_tree().connect("connected_to_server", self, "_connected_ok")
 	get_tree().connect("connection_failed", self, "_connected_fail")
 	get_tree().connect("server_disconnected", self, "_server_disconnected")
-
 
 func _player_connected(id):
 	"""
@@ -33,16 +37,14 @@ func _player_connected(id):
 	"""
 	rpc_id(id, "register_player", player_name)
 
-
 remote func register_player(new_player):
 	"""
 	Register a new player, and register your
-	datain the server.
+	data in the server.
 	"""
 	var id = get_tree().get_rpc_sender_id()
 	players[id] = new_player
 	emit_signal("player_list_changed")
-
 
 func _on_player_disconnected(id):
 	"""
@@ -58,12 +60,10 @@ func _on_player_disconnected(id):
 		Unregister this player.
 		"""
 		unregister_player(id)
-		
-		
+
 func unregister_player(id):
 	players.erase(id)
 	emit_signal("player_list_changed")
-	
 
 func create_server(player_nickname):
 	"""
@@ -74,17 +74,19 @@ func create_server(player_nickname):
 	peer.create_server(DEFAULT_PORT, MAX_PLAYERS)
 	get_tree().set_network_peer(peer)
 
-
-func connect_to_server(player_nickname):
+func connect_to_server(player_nickname, server_code):
 	"""
-	starts the client connection, already 
-	setting your nick name.
+	The connection is via local network. So when the client 
+	goes if connect he needs IP server. The code contains 
+	the last number of IP server. Get your IP in the 
+	network and build the IP server to connect.
 	"""
 	player_name = player_nickname
 	var peer = NetworkedMultiplayerENet.new()
-	peer.create_client(DEFAULT_IP, DEFAULT_PORT)
+	var index_last_point = DEFAULT_IP.find_last(".") # e.g: 192.168.1
+	var SERVER_IP = DEFAULT_IP.substr(0, index_last_point) + "." + server_code[-1] # e.g: 192.168.1.5
+	peer.create_client(SERVER_IP, DEFAULT_PORT)
 	get_tree().set_network_peer(peer)
-
 
 func _connected_ok():
 	"""
@@ -94,7 +96,6 @@ func _connected_ok():
 	""" 
 	emit_signal("connection_succeeded")
 
-
 func _server_disconnected():
 	"""
 	Callback from SceneTree, only 
@@ -102,7 +103,6 @@ func _server_disconnected():
 	"""
 	emit_signal("game_error", "Server disconnected")
 	end_game()
-
 
 func begin_game():
 	"""
@@ -132,7 +132,6 @@ func begin_game():
 		rpc_id(player_id, "pre_start_game", spawn_points)
 	pre_start_game(spawn_points)
 
-
 remote func pre_start_game(spawn_points):
 	"""
 	Configure the world, player instances and 
@@ -144,13 +143,13 @@ remote func pre_start_game(spawn_points):
 	get_tree().get_root().get_node("Main").hide()
 
 	var player_scene = load("res://src/scenes/player/Player.tscn")
-	
+
 	for player_id in spawn_points:
 		var spawn_position = world.get_node("SpawnPoints/" + str(spawn_points[player_id])).position
 		var player = player_scene.instance()
 		player.set_name(str(player_id))
 		player.set_network_master(player_id)
-		
+
 		var nick_name = null
 		
 		if player_id == get_tree().get_network_unique_id():
@@ -184,7 +183,6 @@ remote func pre_start_game(spawn_points):
 		"""
 		post_start_game()
 
-
 remote func ready_to_start(id):
 	"""
 	Read all registered player, and send an rpc_id
@@ -204,13 +202,11 @@ remote func ready_to_start(id):
 			rpc_id(p, "post_start_game")
 		post_start_game()
 
-
 remote func post_start_game():
 	"""
 	Unpause the game for the current player.
 	"""
 	get_tree().set_pause(false)
-
 
 func end_game():
 	if has_node("/root/World"):
@@ -218,10 +214,22 @@ func end_game():
 	emit_signal("game_ended")
 	players.clear()
 
-
 func get_player_list():
 	return players.values()
 
-
 func get_player_name():
 	return player_name
+
+func get_server_code():
+	return server_code
+
+func is_server():
+	return get_tree().is_network_server()
+
+func generate_server_unique_code():
+	"""
+	Get the IP of the machine and generate
+	a unique code to identify the server
+	"""
+	var code = DEFAULT_IP.right(DEFAULT_IP.find_last(".") + 1)
+	server_code = str(rng.randi_range(111, 999)) + str(code)
