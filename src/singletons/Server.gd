@@ -1,9 +1,10 @@
 extends Node
 
-var DEFAULT_IP = IP.get_local_addresses()[0]
 const DEFAULT_PORT = 6969
 const MAX_PLAYERS = 20
+const RANDOM_CODE_LENGHT = 3
 
+var default_ip
 var server_code = null
 var player_name = null
 
@@ -21,6 +22,12 @@ signal game_error(what)
 var rng = RandomNumberGenerator.new()
 
 func _ready():
+	if OS.has_feature("Windows"):
+		default_ip = IP.resolve_hostname(str(OS.get_environment("COMPUTERNAME")),1)
+	elif OS.has_feature("X11") or OS.has_feature("OSX"):
+		default_ip = IP.resolve_hostname(str(OS.get_environment("HOSTNAME")),1)
+	else:
+		default_ip = IP.get_local_addresses()[0]
 	rng.randomize()
 
 	get_tree().connect('network_peer_disconnected', self, '_on_player_disconnected')
@@ -83,8 +90,8 @@ func connect_to_server(player_nickname, server_code):
 	"""
 	player_name = player_nickname
 	var peer = NetworkedMultiplayerENet.new()
-	var index_last_point = DEFAULT_IP.find_last(".") # e.g: 192.168.1
-	var SERVER_IP = DEFAULT_IP.substr(0, index_last_point) + "." + server_code[-1] # e.g: 192.168.1.5
+	var index_last_point = default_ip.find_last(".") # e.g: 192.168.1
+	var SERVER_IP = default_ip.substr(0, index_last_point) + "." + server_code.right(RANDOM_CODE_LENGHT) # e.g: 192.168.1.5
 	peer.create_client(SERVER_IP, DEFAULT_PORT)
 	get_tree().set_network_peer(peer)
 
@@ -226,10 +233,19 @@ func get_server_code():
 func is_server():
 	return get_tree().is_network_server()
 
+func generate_random_code():
+	var from_code = ""
+	var to_code = ""
+	for i in range(RANDOM_CODE_LENGHT):
+		from_code += "1"
+		to_code += "9"
+	return rng.randi_range(int(from_code), int(to_code))
+
 func generate_server_unique_code():
 	"""
 	Get the IP of the machine and generate
 	a unique code to identify the server
 	"""
-	var code = DEFAULT_IP.right(DEFAULT_IP.find_last(".") + 1)
-	server_code = str(rng.randi_range(111, 999)) + str(code)
+	var default_ip_code = default_ip.right(default_ip.find_last(".") + 1)
+	var random_code = generate_random_code()
+	server_code = str(random_code) + str(default_ip_code)
