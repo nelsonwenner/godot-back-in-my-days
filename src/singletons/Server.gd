@@ -163,6 +163,7 @@ remote func pre_start_game(spawn_points):
 			nick_name = player_name
 		else:
 			nick_name = players[player_id]
+			player.get_node("Camera2D").current = false
 		
 		player.init(
 			nick_name,
