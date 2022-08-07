@@ -22,7 +22,6 @@ var rng
 func _ready():
 	rng = RandomNumberGenerator.new()
 	rng.randomize()
-	
 
 func init(nickname, start_position, is_hunter):
 	global_position = start_position
@@ -37,7 +36,6 @@ func init(nickname, start_position, is_hunter):
 		var animated_female = get_node("AnimatedFemale")
 		animated_female.visible = true
 		animated_sprite = animated_female
-
 
 func _physics_process(_delta):
 	var direction = MoveDirection.REST
@@ -68,8 +66,7 @@ func _physics_process(_delta):
 		yield(get_tree().create_timer(30), "timeout")
 		get_node(".").visible = true
 		visibility_control_slave = true
-	
-	
+
 func _move(direction):
 	match direction:
 		MoveDirection.REST:
@@ -88,7 +85,6 @@ func _move(direction):
 			move_and_slide(Vector2(SPEED, 0))
 			_anime_right()
 
-
 puppet func puppet_gotchar():
 	"""
 	Usado para atualizar os seus fantachos no jogo,
@@ -100,13 +96,11 @@ puppet func puppet_gotchar():
 	animated_gotcha.visible = true
 	animated_gotcha.play("gotcha")
 
-
 puppet func puppet_desgotchar():
 	picked = false
 	var animated_gotcha = get_node("AnimatedGotcha")
 	animated_gotcha.visible = false
 	animated_gotcha.stop()
-
 
 master func master_gotchar():
 	"""
@@ -121,11 +115,9 @@ master func master_gotchar():
 	# update for all clients and servers, this variable.
 	rset("hunter_picked_player", true)
 
-
 master func master_desgotchar():
 	rpc("puppet_desgotchar")
 	puppet_desgotchar()
-
 
 remote func restart(pos):
 	visibility_control_slave = false
@@ -148,15 +140,12 @@ func _anime_right():
 	animated_sprite.play("move")
 	animated_sprite.flip_h = false
 
-	
 func _anime_left():
 	animated_sprite.play("move")
 	animated_sprite.flip_h = true
 
-
 func _anime_move():
 	animated_sprite.play("move")
-	
 
 func _on_RestartGame_timeout():
 	if get_tree().is_network_server():

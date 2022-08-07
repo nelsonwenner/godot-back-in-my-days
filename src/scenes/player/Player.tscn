@@ -61,9 +61,7 @@ animations = [ {
 "speed": 6.0
 } ]
 
-[node name="Player" type="KinematicBody2D" groups=[
-"players",
-]]
+[node name="Player" type="KinematicBody2D" groups=["players"]]
 scale = Vector2( 0.3, 0.3 )
 script = ExtResource( 2 )
 
@@ -109,15 +107,15 @@ polygon = PoolVector2Array( 0.000379695, 106.667, -19.9997, 80.0001, -20.0003, -
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 0, -160 )
 current = true
-zoom = Vector2( 1.76, 1.8 )
 limit_left = 0
 limit_top = -550
 limit_right = 3380
-limit_bottom = 408
+limit_bottom = 1440
 editor_draw_drag_margin = true
 
 [node name="RestartGame" type="Timer" parent="."]
 wait_time = 160.0
 autostart = true
+
 [connection signal="body_entered" from="Detection" to="Detection" method="_on_Detection_body_entered"]
 [connection signal="timeout" from="RestartGame" to="." method="_on_RestartGame_timeout"]
