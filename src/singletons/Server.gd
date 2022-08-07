@@ -23,13 +23,11 @@ var rng = RandomNumberGenerator.new()
 
 func _ready():
 	if OS.has_feature("Windows"):
-		default_ip = IP.resolve_hostname(str(OS.get_environment("COMPUTERNAME")),1)
-	elif OS.has_feature("X11") or OS.has_feature("OSX"):
-		default_ip = IP.resolve_hostname(str(OS.get_environment("HOSTNAME")),1)
+		default_ip = IP.resolve_hostname(str(OS.get_environment("COMPUTERNAME")), 1)
 	else:
 		default_ip = IP.get_local_addresses()[0]
-	rng.randomize()
 
+	rng.randomize()
 	get_tree().connect('network_peer_disconnected', self, '_on_player_disconnected')
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 	get_tree().connect("connected_to_server", self, "_connected_ok")
